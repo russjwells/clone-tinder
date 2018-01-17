@@ -5,7 +5,7 @@ export default class App extends Component {
   render() {
     return (
       <View style={styles.card}>
-        <Text>stuff</Text>
+        
       </View>
     )
   }
@@ -13,8 +13,13 @@ export default class App extends Component {
 
 const styles = StyleSheet.create({
   card: {
-    backgroundColor: 'skyblue',
-    width: 100,
-    height: 100,
+    flex: 1,
+    backgroundColor: 'white',
+    margin: 10,
+    marginTop: 100,
+    marginBottom: 100,
+    borderWidth: 1,
+    borderColor: 'lightgrey',
+    borderRadius: 10,
   },
 })
