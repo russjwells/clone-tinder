@@ -11,6 +11,10 @@ export default class App extends Component {
           style={{flex: 1}}
           source={{uri: fbImage}}
         />
+        <View style={{margin: 20}}>
+          <Text style={{fontSize: 20}}>Russ, 28</Text>
+          <Text style={{fontSize: 15, color:'darkgrey'}}>Hi, I'm me, in'lakesh</Text>
+        </View>
       </View>
     )
   }
