@@ -17,9 +17,7 @@ export default class App extends Component {
   render() {
     return (
       <View 
-      onStartShouldSetResponder={this.cardPanResponder.panHandlers.onStartShouldSetResponder}
-      onResponderMove={this.cardPanResponder.panHandlers.onResponderMove}
-      onResponderRelease={this.cardPanResponder.panHandlers.onResponderRelease}
+      {...this.cardPanResponder.panHandlers}
       style={styles.card}>
         <Image
           style={{flex: 1}}
