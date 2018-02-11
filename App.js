@@ -1,24 +1,33 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Image, PanResponder } from 'react-native';
+import { View, StyleSheet, Text, Image, PanResponder, Animated } from 'react-native';
 
 const fbImage = 'https://graph.facebook.com/511275546/picture?height=500'
 
 export default class App extends Component {
   componentWillMount() {
-    console.log("hello :)")
+    this.pan = new Animated.ValueXY();
     this.cardPanResponder = PanResponder.create({
       onStartShouldSetPanResponder: () => true,
-      onPanResponderMove: (e, gesture) => console.log(gesture.moveX),
+      onPanResponderMove: Animated.event([
+        null,
+        {dx:this.pan.x, dy:this.pan.y},
+      ]),
       onPanResponderRelease: (e, gesture) => console.log("Released", gesture.moveY),
     })
     console.log(this.cardPanResponder);
   }
 
   render() {
+    const animatedStyle = {
+      transform: [
+        {translateX: this.pan.x},
+        {translateY: this.pan.y},
+      ],
+    }
     return (
-      <View 
+      <Animated.View 
       {...this.cardPanResponder.panHandlers}
-      style={styles.card}>
+      style={[styles.card, animatedStyle]}>
         <Image
           style={{flex: 1}}
           source={{uri: fbImage}}
@@ -27,7 +36,7 @@ export default class App extends Component {
           <Text style={{fontSize: 20}}>Russ, 28</Text>
           <Text style={{fontSize: 15, color:'darkgrey'}}>Hi, I'm me, in'lakesh</Text>
         </View>
-      </View>
+      </Animated.View>
     )
   }
 }
