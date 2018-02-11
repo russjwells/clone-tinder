@@ -1,12 +1,26 @@
-import React, {Component} from 'react';
-import { View, StyleSheet, Text, Image } from 'react-native';
+import React, { Component } from 'react';
+import { View, StyleSheet, Text, Image, PanResponder } from 'react-native';
 
 const fbImage = 'https://graph.facebook.com/511275546/picture?height=500'
 
 export default class App extends Component {
+  componentWillMount() {
+    console.log("hello :)")
+    this.cardPanResponder = PanResponder.create({
+      onStartShouldSetPanResponder: () => true,
+      onPanResponderMove: (e, gesture) => console.log(gesture.moveX),
+      onPanResponderRelease: (e, gesture) => console.log("Released", gesture.moveY),
+    })
+    console.log(this.cardPanResponder);
+  }
+
   render() {
     return (
-      <View style={styles.card}>
+      <View 
+      onStartShouldSetResponder={this.cardPanResponder.panHandlers.onStartShouldSetResponder}
+      onResponderMove={this.cardPanResponder.panHandlers.onResponderMove}
+      onResponderRelease={this.cardPanResponder.panHandlers.onResponderRelease}
+      style={styles.card}>
         <Image
           style={{flex: 1}}
           source={{uri: fbImage}}
