@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, Image, PanResponder, Animated, Dimensions } from 'react-native';
+import moment from 'moment'
 
 const {width, height} = Dimensions.get('window')
-
-const fbImage = 'https://graph.facebook.com/511275546/picture?height=500'
 
 export default class Card extends Component {
   componentWillMount() {
@@ -35,6 +34,11 @@ export default class Card extends Component {
   }
 
   render() {
+    const {birthday, name, bio, id} = this.props.profile
+    const fbImage = `https://graph.facebook.com/${id}/picture?height=500`
+    const profileBday = moment(birthday, 'MM/DD/YYYY')
+    const profileAge = moment().diff(profileBday, 'years')
+
     const rotateCard = this.pan.x.interpolate({
       inputRange: [-200, 0, 200],
       outputRange: ['10deg', '0deg', '-10deg'],
@@ -55,8 +59,8 @@ export default class Card extends Component {
           source={{uri: fbImage}}
         />
         <View style={{margin: 20}}>
-          <Text style={{fontSize: 20}}>Russ, 28</Text>
-          <Text style={{fontSize: 15, color:'darkgrey'}}>Hi, I'm me, in'lakesh</Text>
+          <Text style={{fontSize: 20}}>{name}, {profileAge}</Text>
+          <Text style={{fontSize: 15, color:'darkgrey'}}>{bio}</Text>
         </View>
       </Animated.View>
     )
