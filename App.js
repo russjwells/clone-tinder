@@ -5,15 +5,24 @@ import Card from './card'
 const fbImage = 'https://graph.facebook.com/511275546/picture?height=500'
 
 export default class App extends Component {
+  state = {
+    profileIndex: 0,
+  }
+
+  nextCard = () => {
+    this.setState({profileIndex: this.state.profileIndex + 1})
+  }
 
   render() {
+    const {profileIndex} = this.state
     return (
       <View style={{flex: 1}}>
-        {profiles.reverse().map((profile, i) => {
+        {profiles.slice(profileIndex, profileIndex + 3).reverse().map((profile, i) => {
           return (
             <Card 
-              key = {i}
+              key = {profile.id}
               profile = {profile}
+              onSwipeOff ={this.nextCard}
             />
           )
         })}
