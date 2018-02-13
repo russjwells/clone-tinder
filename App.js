@@ -2,11 +2,24 @@ import React, { Component } from 'react';
 import { View, StyleSheet, Text, Image, PanResponder, Animated } from 'react-native';
 import Card from './card'
 
-const fbImage = 'https://graph.facebook.com/511275546/picture?height=500'
+import * as firebase from 'firebase'
+
+const firebaseConfig = {
+  apiKey: "AIzaSyDg4fI6UyL6hYvDHwELQ75pjwspQW8_kDA",
+  databaseURL: "https://clone-tinder-137.firebaseio.com",
+}
+
+firebase.initializeApp(firebaseConfig)
 
 export default class App extends Component {
   state = {
     profileIndex: 0,
+  }
+
+  componentWillMount() {
+    firebase.database().ref().child('users').once('value', (snap) => {
+      console.log('Data', snap.val())
+    })
   }
 
   nextCard = () => {
