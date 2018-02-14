@@ -9,7 +9,7 @@ export default class Login extends Component {
                 style={styles.container}
             >
                 <FacebookButton 
-                    onPress={() => console.log('Pressed')}
+                    onPress={() => this.props.navigation.navigate('Home')}
                 />
             </View>
         )
