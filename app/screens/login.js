@@ -15,11 +15,12 @@ export default class Login extends Component {
     login = async () => {
         const ADD_ID = '1773849149576744'
         const options = {
-            permissions: ['public_profile', 'email']
+            permissions: ['public_profile', 'user_birthday', 'user_work_history', 'email']
         }
         const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(ADD_ID, options)
         if (type === 'success') {
-            const response = await fetch(`https://graph.facebook.com/me?access_token=${token}`)
+            const fields = ['id', 'first_name', 'last_name', 'gender', 'birthday', 'work']
+            const response = await fetch(`https://graph.facebook.com/me?fields=${fields.toString()}&access_token=${token}`)
             console.log(await response.json())
             this.authenticate(token)
         }
