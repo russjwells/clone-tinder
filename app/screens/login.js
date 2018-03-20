@@ -6,6 +6,14 @@ import FacebookButton from '../components/facebookButton'
 
 export default class Login extends Component {
 
+    componentDidMount() {
+        firebase.auth().onAuthStateChanged(user => {
+            if (user){
+                this.props.navigation.navigate('Home')
+            }
+        })
+    }
+
     authenticate = (token) => {
         const provider = firebase.auth.FacebookAuthProvider
         const credential = provider.credential(token)
