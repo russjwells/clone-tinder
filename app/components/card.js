@@ -30,7 +30,7 @@ export default class Card extends Component {
         }
       },
     })
-    console.log(this.cardPanResponder);
+    //console.log(this.cardPanResponder);
   }
 
   render() {
