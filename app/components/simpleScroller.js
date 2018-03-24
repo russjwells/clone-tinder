@@ -1,27 +1,24 @@
-import React, {Component} from 'react'
-import {
-    View,
-    StyleSheet,
-    Animated,
-    PanResponder,
-} from 'react-native'
+import React, { Component } from 'react'
+import { View, StyleSheet, Animated, PanResponder } from 'react-native'
 
 export default class SimpleScroller extends Component {
     componentWillMount() {
         this.pan = new Animated.Value(0)
+
         this.scrollResponder = PanResponder.create({
-            onMoveShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponder: () => true,
             onPanResponderMove: Animated.event([
                 null,
                 {dx:this.pan},
             ]),
             onPanResponderRelease: () => {
                 Animated.spring(this.pan, {
-                    toValue: 0,
+                toValue: 0,
                 }).start()
-            }
+            },
         })
     }
+
     render() {
         const animatedStyles = {
             transform: [
@@ -29,9 +26,9 @@ export default class SimpleScroller extends Component {
             ],
         }
         return(
-            <Animated.View 
-            style={[styles.scroller, animatedStyles]}
-            {...this.scrollResponder.panHandlers}>
+            <Animated.View
+                style={[styles.scroller, animatedStyles]}
+                {...this.scrollResponder.panHandlers}>
                 {this.props.screen}
             </Animated.View>
         )

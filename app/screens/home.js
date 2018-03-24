@@ -1,8 +1,9 @@
 import Expo from 'expo'
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, Image, PanResponder, Animated } from 'react-native';
+import { View } from 'react-native';
 import * as firebase from 'firebase'
 import GeoFire from 'geofire'
+
 import Card from '../components/card'
 import SimpleScroller from '../components/simpleScroller'
 
@@ -63,9 +64,7 @@ export default class Home extends Component {
   cardStack = () => {
     const {profileIndex} = this.state
     return(
-      <View 
-      style={{flex: 1}}
-      >
+      <View style={{flex: 1}}>
         {this.state.profiles.slice(profileIndex, profileIndex + 3).reverse().map((profile, i) => {
           return (
             <Card 
@@ -81,9 +80,8 @@ export default class Home extends Component {
 
   render() {
     return (
-      <SimpleScroller
-        screen={this.cardStack()}
-      />
+      <SimpleScroller screen={this.cardStack()} />
+      //this.cardStack()
     )
   }
 }

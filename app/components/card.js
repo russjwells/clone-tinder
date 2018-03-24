@@ -16,7 +16,7 @@ export default class Card extends Component {
       onPanResponderRelease: (e, {dx}) => {
         const absDx = Math.abs(dx)
         const direction = absDx / dx
-
+		
         if (absDx > 120) {
             Animated.decay(this.pan, {
                 velocity: {x:3 * direction, y:0},
@@ -29,8 +29,8 @@ export default class Card extends Component {
                 }).start()
         }
       },
-    })
-    //console.log(this.cardPanResponder);
+    }),
+    console.log('card pan responder created');
   }
 
   render() {
