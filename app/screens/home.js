@@ -80,7 +80,11 @@ export default class Home extends Component {
 
   render() {
     return (
-      <SimpleScroller screen={this.cardStack()} />
+      <SimpleScroller 
+      screens={[
+        <View style={{flex: 1, backgroundColor:'red'}} />,
+        this.cardStack(),
+        ]} />
       //this.cardStack()
     )
   }
