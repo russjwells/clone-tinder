@@ -11,7 +11,7 @@
     "react": "16.0.0",
     "react-native": "https://github.com/expo/react-native/archive/sdk-24.0.0.tar.gz",
     "react-native-gifted-chat": "^0.4.3",
-    "react-navigation": "^1.0.3"
+    "react-navigation": "^1.5.11"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",

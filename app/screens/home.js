@@ -6,37 +6,59 @@ import GeoFire from 'geofire'
 
 import Card from '../components/card'
 import SimpleScroller from '../components/simpleScroller'
+import Profile from './profile'
+import Matches from './matches'
+
+import filter from '../modules/filter'
 
 export default class Home extends Component {
   state = {
     profileIndex: 0,
     profiles: [],
+    user: this.props.navigation.state.params.user
   }
 
   componentWillMount() {
-    const {uid} = this.props.navigation.state.params
+    const {uid} = this.state.user
     this.updateUserLocation(uid)
-    this.getProfiles(uid)
+    firebase.database().ref('users').child(uid).on('value', snap => {
+      const user = snap.val()
+      this.setState({
+        user,
+        profiles:[],
+        profileIndex:0,
+      })
+      this.getProfiles(user.uid, user.distance)
+    })
+    
   }
 
   getUser = (uid) => {
     return firebase.database().ref('users').child(uid).once('value')
   }
 
-  getProfiles = async (uid) => {
+  getSwiped = (uid) => {
+    return firebase.database().ref('relationships').child(uid).child('liked')
+      .once('value')
+      .then(snap => snap.val() || {})
+  }
+
+  getProfiles = async (uid, distance) => {
     const geoFireRef = new GeoFire(firebase.database().ref('geoData'))
     const userLocation = await geoFireRef.get(uid)
+    const swipedProfiles = await this.getSwiped(uid)
     console.log('userLocation', userLocation)
     const geoQuery = geoFireRef.query({
       center: userLocation,
-      radius: 10 //km
+      radius: distance, //km
     })
     geoQuery.on('key_entered', async (uid, location, distance) => {
       console.log(uid + ' at ' + location + ' is ' + distance + 'km from the center')
       const user = await this.getUser(uid)
       console.log(user.val().first_name)
       const profiles = [...this.state.profiles, user.val()]
-      this.setState({profiles})
+      const filtered = filter(profiles, this.state.user, swipedProfiles)
+      this.setState({profiles: filtered})
     })
   }
 
@@ -57,8 +79,22 @@ export default class Home extends Component {
     }
   }
 
-  nextCard = () => {
+  relate = (userUid, profileUid, status) => {
+    let relationUpdate = {}
+    relationUpdate[`${userUid}/liked/${profileUid}`] = status
+    relationUpdate[`${profileUid}/likedBack/${userUid}`] = status
+
+    firebase.database().ref('relationships').update(relationUpdate)
+  }
+
+  nextCard = (swipedRight, profileUid) => {
+    const userUid = this.state.user.uid
     this.setState({profileIndex: this.state.profileIndex + 1})
+    if (swipedRight) {
+      this.relate(userUid, profileUid, true)
+    } else {
+      this.relate(userUid, profileUid, false)
+    }
   }
 
   cardStack = () => {
@@ -82,8 +118,9 @@ export default class Home extends Component {
     return (
       <SimpleScroller 
       screens={[
-        <View style={{flex: 1, backgroundColor:'red'}} />,
+        <Profile user={this.state.user}/>,
         this.cardStack(),
+        <Matches navigation={this.props.navigation} user={this.state.user}/>
         ]} />
       //this.cardStack()
     )

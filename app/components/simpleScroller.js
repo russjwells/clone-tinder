@@ -8,7 +8,8 @@ export default class SimpleScroller extends Component {
         this.pan = new Animated.Value(0)
 
         this.scrollResponder = PanResponder.create({
-            onStartShouldSetPanResponder: () => true,
+            onStartShouldSetPanResponder: () => false,
+            onMoveShouldSetPanResponder: (e, {dx, dy}) => Math.abs(dx) > Math.abs(dy),
             onPanResponderGrant: () => {
                 this.pan.setOffset(this.pan._value)
                 this.pan.setValue(0)
@@ -17,8 +18,13 @@ export default class SimpleScroller extends Component {
                 null,
                 {dx:this.pan},
             ]),
-            onPanResponderRelease: (e, {vx}) => {
-                this.pan.flattenOffset()
+            onPanResponderReject: this.handlePanResponderEnd,
+            onPanResponderRelease: this.handlePanResponderEnd,
+        })
+    }
+
+    handlePanResponderEnd = (e, {vx}) => {
+        this.pan.flattenOffset()
                 let move = Math.round(this.pan._value / width) * width
                 if(Math.abs(vx) > 0.25) {
                     const direction = vx / Math.abs(vx)
@@ -30,9 +36,7 @@ export default class SimpleScroller extends Component {
                 toValue: this.clamp(move, minScroll, 0),
                 bounciness: 0,
                 }).start()
-            },
-        })
-    }
+    } 
 
     clamp = (num, min, max) => {
         return num <= min ? min : num >= max ? max : num
@@ -49,7 +53,7 @@ export default class SimpleScroller extends Component {
             <Animated.View
                 style={[styles.scroller, animatedStyles, {width:scrollerWidth}]}
                 {...this.scrollResponder.panHandlers}>
-                {this.props.screens.map((screen, i) => <View style={{width, height}}>{screen}</View>)}
+                {this.props.screens.map((screen, i) => <View key={i} style={{width, height}}>{screen}</View>)}
             </Animated.View>
         )
     }
@@ -58,7 +62,7 @@ export default class SimpleScroller extends Component {
 const styles = StyleSheet.create({
     scroller: {
         flex: 1,
-        backgroundColor: 'blue',
+        backgroundColor: 'white',
         flexDirection: 'row'
     },
 })
