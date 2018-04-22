@@ -27,7 +27,7 @@ export default class Login extends Component {
     login = async () => {
         const ADD_ID = '1773849149576744'
         const options = {
-            permissions: ['public_profile', 'user_birthday', 'user_work_history', 'email']
+            permissions: ['public_profile', 'email']
         }
         const {type, token} = await Expo.Facebook.logInWithReadPermissionsAsync(ADD_ID, options)
         if (type === 'success') {
